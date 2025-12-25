@@ -30,7 +30,7 @@ public class Main {
         System.out.println("Updated Item 3: " + item3);
         System.out.println();
 
-        System.out.println("Testing Additional Methods");
+        System.out.println("Testing Additional Methods ");
         System.out.println(item1.getName() + " is premium: " + item1.isPremium());
         System.out.println("Applying 10% discount to " + item1.getName());
         item1.applyDiscount(10);
