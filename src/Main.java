@@ -24,7 +24,7 @@ public class Main {
         System.out.println();
 
         System.out.println("Testing Setters");
-        item3.setName("Pants");
+        item3.setName("T-Shirt");
         item3.setPrice(8500.0);
         item3.setSize("One Size");
         System.out.println("Updated Item 3: " + item3);
