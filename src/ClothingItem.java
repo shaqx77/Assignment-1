@@ -1,9 +1,9 @@
 public class ClothingItem {
-    private int itemId;
-    private String name;
-    private String size;
-    private double price;
-    private String brand;
+    protected int itemId;
+    protected String name;
+    protected String size;
+    protected double price;
+    protected String brand;
 
     public ClothingItem(int itemId, String name, String size, double price, String brand) {
         this.itemId = itemId;
@@ -34,12 +34,18 @@ public class ClothingItem {
     public void applyDiscount(double percentage) {
         this.price = this.price * (1 - percentage / 100);
     }
-    public boolean isPremium() {
-        return this.price > 20000;
+
+    public String getCategory() {
+        return "General Clothing";
     }
+
+    public void performAction() {
+        System.out.println("Processing " + name);
+    }
+
     @Override
     public String toString() {
-        return String.format("ID: %-5d  Item: %-15s  Size: %-3s  Price: %10.2f KZT  Brand: %s",
-                itemId, name, size, price, brand);
+        return String.format("[%s] ID: %d | Name: %-10s | Price: %.2f KZT",
+                getCategory(), itemId, name, price);
     }
 }

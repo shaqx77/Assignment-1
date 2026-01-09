@@ -1,51 +1,78 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
+    private static ArrayList<ClothingItem> inventory = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        System.out.println("Clothing Store Management System");
-        System.out.println();
+        int choice;
+        do {
+            System.out.println("\n--- CLOTHING STORE MANAGEMENT ---");
+            System.out.println("1. Add General Clothing");
+            System.out.println("2. Add Shirt");
+            System.out.println("3. Add Jacket");
+            System.out.println("4. View All Items (Polymorphic)");
+            System.out.println("5. Perform Actions (Polymorphism Demo)");
+            System.out.println("6. View Jackets Only (instanceof Demo)");
+            System.out.println("0. Exit");
+            System.out.print("Choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
 
-        ClothingItem item1 = new ClothingItem(101, "Jacket", "L", 25000.0, "Zara");
-        ClothingItem item2 = new ClothingItem(102, "Jeans", "M", 12000.0, "Bershka");
-        ClothingItem item3 = new ClothingItem();
+            switch (choice) {
+                case 1 -> addGeneral();
+                case 2 -> addShirt();
+                case 3 -> addJacket();
+                case 4 -> viewAll();
+                case 5 -> demoPolymorphism();
+                case 6 -> viewJacketsOnly();
+            }
+        } while (choice != 0);
+    }
 
-        Customer cust1 = new Customer(501, "Kylian Mbappe", "M", 600);
-        Order ord1 = new Order(1001, "Kylian Mbappe", 25000.0, "Pending");
+    private static void addGeneral() {
+        System.out.print("ID: "); int id = scanner.nextInt(); scanner.nextLine();
+        System.out.print("Name: "); String name = scanner.nextLine();
+        System.out.print("Price: "); double price = scanner.nextDouble();
+        inventory.add(new ClothingItem(id, name, "M", price, "Brand"));
+    }
 
-        System.out.println("Initial Objects");
-        System.out.println(item1);
-        System.out.println(item2);
-        System.out.println(item3);
-        System.out.println(cust1);
-        System.out.println(ord1);
-        System.out.println();
+    private static void addShirt() {
+        System.out.print("ID: "); int id = scanner.nextInt(); scanner.nextLine();
+        System.out.print("Name: "); String name = scanner.nextLine();
+        System.out.print("Price: "); double price = scanner.nextDouble(); scanner.nextLine();
+        System.out.print("Material: "); String mat = scanner.nextLine();
+        inventory.add(new Shirt(id, name, "M", price, "Brand", mat));
+    }
 
-        System.out.println("Testing Getters");
-        System.out.println("Item 1 Brand: " + item1.getBrand());
-        System.out.println("Customer 1 Name: " + cust1.getName());
-        System.out.println();
+    private static void addJacket() {
+        System.out.print("ID: "); int id = scanner.nextInt(); scanner.nextLine();
+        System.out.print("Name: "); String name = scanner.nextLine();
+        System.out.print("Price: "); double price = scanner.nextDouble();
+        System.out.print("Waterproof (true/false): "); boolean water = scanner.nextBoolean();
+        inventory.add(new Jacket(id, name, "L", price, "Brand", water));
+    }
 
-        System.out.println("Testing Setters");
-        item3.setName("T-Shirt");
-        item3.setPrice(8500.0);
-        item3.setSize("One Size");
-        System.out.println("Updated Item 3: " + item3);
-        System.out.println();
+    private static void viewAll() {
+        for (ClothingItem item : inventory) {
+            System.out.println(item);
+        }
+    }
 
-        System.out.println("Testing Additional Methods ");
-        System.out.println(item1.getName() + " is premium: " + item1.isPremium());
-        System.out.println("Applying 10% discount to " + item1.getName());
-        item1.applyDiscount(10);
-        System.out.println("New Price: " + item1.getPrice());
-        System.out.println();
+    private static void demoPolymorphism() {
+        for (ClothingItem item : inventory) {
+            item.performAction();
+        }
+    }
 
-        System.out.println(cust1.getName() + " is VIP: " + cust1.isVIP());
-        cust1.addPoints(50);
-        System.out.println("New Points: " + cust1.getPoints());
-        System.out.println();
-
-        System.out.println("Completing order " + ord1.getOrderId());
-        ord1.completeOrder();
-        System.out.println("Order Status: " + ord1.getStatus());
-
-
+    private static void viewJacketsOnly() {
+        for (ClothingItem item : inventory) {
+            if (item instanceof Jacket) {
+                Jacket j = (Jacket) item;
+                System.out.println(j);
+                j.zipUp();
+            }
+        }
     }
 }
