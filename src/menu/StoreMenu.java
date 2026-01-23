@@ -6,11 +6,13 @@ import java.util.Scanner;
 
 public class StoreMenu implements Menu {
     private ArrayList<ClothingItem> inventory = new ArrayList<>();
+    private ArrayList<Customer> customers = new ArrayList<>();
     private Scanner scanner = new Scanner(System.in);
 
     public StoreMenu() {
         inventory.add(new Shirt(101, "Cotton Tee", "M", 5000, "Nike", "Cotton"));
         inventory.add(new Jacket(201, "Winter Coat", "L", 25000, "NorthFace", true));
+        customers.add(new Customer(1, "Alibi", "L", 600));
     }
 
     @Override
@@ -19,7 +21,9 @@ public class StoreMenu implements Menu {
         System.out.println("1. Add Shirt");
         System.out.println("2. Add Jacket");
         System.out.println("3. View All Items");
-        System.out.println("4. Perform Actions");
+        System.out.println("4. View Customers");
+        System.out.println("5. View Specific Clothing Item (by ID)");
+        System.out.println("6. Perform Actions");
         System.out.println("0. Exit");
         System.out.print("Choice: ");
     }
@@ -35,7 +39,9 @@ public class StoreMenu implements Menu {
                     case 1 -> addShirt();
                     case 2 -> addJacket();
                     case 3 -> viewItems();
-                    case 4 -> demoActions();
+                    case 4 -> viewCustomers();
+                    case 5 -> viewClothingItem();
+                    case 6 -> demoActions();
                     case 0 -> running = false;
                     default -> System.out.println("Invalid choice!");
                 }
@@ -44,6 +50,46 @@ public class StoreMenu implements Menu {
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
+        }
+    }
+
+    private void viewCustomers() {
+        System.out.println("\n--- CUSTOMER LIST ---");
+        if (customers.isEmpty()) {
+            System.out.println("No customers found.");
+        } else {
+            for (Customer c : customers) {
+                System.out.println(c);
+            }
+        }
+    }
+
+    private void viewClothingItem() {
+        try {
+            System.out.print("Enter Item ID to search: ");
+            int id = Integer.parseInt(scanner.nextLine());
+            boolean found = false;
+
+            for (ClothingItem item : inventory) {
+                if (item.getItemId() == id) {
+                    System.out.println("Found: " + item);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                System.out.println("Item with ID " + id + " not found.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Invalid ID format.");
+        }
+    }
+
+    private void viewItems() {
+        System.out.println("\n--- INVENTORY ---");
+        for (ClothingItem item : inventory) {
+            System.out.println(item);
         }
     }
 
@@ -70,12 +116,6 @@ public class StoreMenu implements Menu {
             System.out.println("Jacket added successfully!");
         } catch (IllegalArgumentException e) {
             System.out.println("Validation Error: " + e.getMessage());
-        }
-    }
-
-    private void viewItems() {
-        for (ClothingItem item : inventory) {
-            System.out.println(item);
         }
     }
 
