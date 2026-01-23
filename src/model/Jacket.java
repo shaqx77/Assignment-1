@@ -1,3 +1,5 @@
+package model;
+
 public class Jacket extends ClothingItem {
     private boolean isWaterproof;
 
@@ -6,24 +8,13 @@ public class Jacket extends ClothingItem {
         this.isWaterproof = isWaterproof;
     }
 
-    public boolean isWaterproof() { return isWaterproof; }
-
-    public void zipUp() {
-        System.out.println("Zipping up the jacket.");
-    }
-
-    @Override
-    public String getCategory() {
-        return "Jacket";
-    }
-
     @Override
     public void performAction() {
         System.out.println("Checking zippers on the jacket: " + name);
     }
 
     @Override
-    public String toString() {
-        return super.toString() + " | Waterproof: " + isWaterproof;
+    public String getCategory() {
+        return "Jacket";
     }
 }

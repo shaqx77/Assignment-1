@@ -1,3 +1,5 @@
+package model;
+
 public class Order {
     private int orderId;
     private String customerName;
@@ -27,7 +29,7 @@ public class Order {
     }
     @Override
     public String toString() {
-        return String.format("Order ID: %-5d  Customer: %-15s  Total: %10.2f KZT  Status: %s",
+        return String.format("model.Order ID: %-5d  model.Customer: %-15s  Total: %10.2f KZT  Status: %s",
                 orderId, customerName, totalAmount, status);
     }
 }

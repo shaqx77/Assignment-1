@@ -1,3 +1,5 @@
+package model;
+
 public class Customer {
     private int customerId;
     private String name;
@@ -12,7 +14,7 @@ public class Customer {
     }
 
     public Customer() {
-        this.name = "New Customer";
+        this.name = "New model.Customer";
     }
 
     public int getCustomerId() { return customerId; }
@@ -32,7 +34,7 @@ public class Customer {
     }
     @Override
     public String toString() {
-        return String.format("Customer ID: %-5d  Name: %-15s  Pref. Size: %-3s  Points: %d (VIP: %b)",
+        return String.format("model.Customer ID: %-5d  Name: %-15s  Pref. Size: %-3s  Points: %d (VIP: %b)",
                 customerId, name, preferredSize, points, isVIP());
     }
 }
