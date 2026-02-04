@@ -1,55 +1,49 @@
 package model;
 
+import exception.InvalidInputException;
+
 public abstract class ClothingItem {
-    protected int itemId;
-    protected String name;
-    protected String size;
-    protected double price;
-    protected String brand;
+    private int itemId;
+    private String name;
+    private String size;
+    private double price;
+    private String brand;
+    private int stockQuantity;
 
-    public ClothingItem(int itemId, String name, String size, double price, String brand) {
-        setItemId(itemId);
-        setName(name);
-        setSize(size);
+    public ClothingItem(int itemId, String name, String size, double price, String brand, int stockQuantity) {
+        this.itemId = itemId;
+        this.name = name;
+        this.size = size;
         setPrice(price);
-        setBrand(brand);
+        this.brand = brand;
+        setStockQuantity(stockQuantity);
     }
-
-    public abstract void performAction();
-    public abstract String getCategory();
 
     public int getItemId() { return itemId; }
-    public void setItemId(int itemId) {
-        if (itemId <= 0) throw new IllegalArgumentException("ID must be positive");
-        this.itemId = itemId;
-    }
-
     public String getName() { return name; }
-    public void setName(String name) {
-        if (name == null || name.trim().isEmpty()) throw new IllegalArgumentException("Name cannot be empty");
-        this.name = name;
-    }
-
     public String getSize() { return size; }
-    public void setSize(String size) {
-        if (size == null || size.trim().isEmpty()) throw new IllegalArgumentException("Size cannot be empty");
-        this.size = size;
-    }
-
     public double getPrice() { return price; }
+    public String getBrand() { return brand; }
+    public int getStockQuantity() { return stockQuantity; }
+
+    public void setName(String name) { this.name = name; }
+
     public void setPrice(double price) {
-        if (price < 0) throw new IllegalArgumentException("Price cannot be negative");
+        if (price < 0) throw new InvalidInputException("Price cannot be negative!");
         this.price = price;
     }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) {
-        this.brand = brand;
+    public void setStockQuantity(int stockQuantity) {
+        if (stockQuantity < 0) throw new InvalidInputException("Stock cannot be negative!");
+        this.stockQuantity = stockQuantity;
     }
+
+    public abstract String getCategory();
+    public abstract void performAction();
 
     @Override
     public String toString() {
-        return String.format("[%s] ID: %d | Name: %-10s | Price: %.2f KZT",
-                getCategory(), itemId, name, price);
+        return String.format("ID: %d | [%s] %-15s | %-10s | Price: %.2f | Stock: %d",
+                itemId, getCategory(), name, brand, price, stockQuantity);
     }
 }
