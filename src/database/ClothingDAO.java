@@ -11,23 +11,23 @@ public class ClothingDAO {
         String sql = "INSERT INTO clothing_item (name, category, price, size, brand, stock_quantity) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, item.getName());
-            pstmt.setString(2, item.getCategory());
-            pstmt.setDouble(3, item.getPrice());
-            pstmt.setString(4, item.getSize());
-            pstmt.setString(5, item.getBrand());
-            pstmt.setInt(6, item.getStockQuantity());
-            pstmt.executeUpdate();
+                 pstmt.setString(1, item.getName());
+                 pstmt.setString(2, item.getCategory());
+                 pstmt.setDouble(3, item.getPrice());
+                 pstmt.setString(4, item.getSize());
+                 pstmt.setString(5, item.getBrand());
+                 pstmt.setInt(6, item.getStockQuantity());
+                 pstmt.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public List<ClothingItem> getAllItems() {
+    public List<ClothingItem> getAllItems(){
         List<ClothingItem> items = new ArrayList<>();
         String sql = "SELECT * FROM clothing_item ORDER BY item_id";
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) items.add(map(rs));
+                 ResultSet rs = stmt.executeQuery(sql)){
+             while (rs.next()) items.add(map(rs));
         } catch (SQLException e) { e.printStackTrace(); }
         return items;
     }
