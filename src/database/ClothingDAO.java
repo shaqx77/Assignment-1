@@ -8,14 +8,14 @@ import java.util.List;
 public class ClothingDAO {
 
     public void insertItem(ClothingItem item) {
-        String sql = "INSERT INTO clothing_item (name, category, price, brand, size, stock_quantity) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO clothing_item (name, category, price, size, brand, stock_quantity) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, item.getName());
             pstmt.setString(2, item.getCategory());
             pstmt.setDouble(3, item.getPrice());
-            pstmt.setString(4, item.getBrand());
-            pstmt.setString(5, item.getSize());
+            pstmt.setString(4, item.getSize());
+            pstmt.setString(5, item.getBrand());
             pstmt.setInt(6, item.getStockQuantity());
             pstmt.executeUpdate();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -77,6 +77,19 @@ public class ClothingDAO {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, "%" + name + "%");
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) items.add(map(rs));
+        } catch (SQLException e) { e.printStackTrace(); }
+        return items;
+    }
+
+    public List<ClothingItem> searchByPriceRange(double min, double max) {
+        List<ClothingItem> items = new ArrayList<>();
+        String sql = "SELECT * FROM clothing_item WHERE price BETWEEN ? AND ? ORDER BY price";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setDouble(1, min);
+            pstmt.setDouble(2, max);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) items.add(map(rs));
         } catch (SQLException e) { e.printStackTrace(); }

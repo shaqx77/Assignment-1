@@ -4,6 +4,7 @@ import model.*;
 import database.ClothingDAO;
 import exception.InvalidInputException;
 import java.util.Scanner;
+import java.util.List;
 
 public class StoreMenu implements Menu {
     private Scanner scanner = new Scanner(System.in);
@@ -12,7 +13,16 @@ public class StoreMenu implements Menu {
     @Override
     public void run() {
         while (true) {
-            System.out.println("\n1. Add Shirt  \n2. Add Jacket  \n3. View All  \n4. Update  \n5. Delete  \n6. Search  \n10. Exit");
+            System.out.println("\n--- CLOTHING STORE MENU ---");
+            System.out.println("1. Add Shirt");
+            System.out.println("2. Add Jacket");
+            System.out.println("3. View All Items");
+            System.out.println("4. Update Item");
+            System.out.println("5. Delete Item");
+            System.out.println("6. Search by Name");
+            System.out.println("7. Search by Price Range");
+            System.out.println("0. Exit");
+
             try {
                 String choice = scanner.nextLine();
                 switch (choice) {
@@ -21,12 +31,11 @@ public class StoreMenu implements Menu {
                     case "3" -> dao.getAllItems().forEach(System.out::println);
                     case "4" -> updateFlow();
                     case "5" -> deleteFlow();
-                    case "6" -> searchFlow();
+                    case "6" -> searchByNameFlow();
+                    case "7" -> searchByPriceFlow();
                     case "0" -> System.exit(0);
                     default -> System.out.println("Invalid choice!");
                 }
-            } catch (InvalidInputException | NumberFormatException e) {
-                System.out.println("Input error: " + e.getMessage());
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
@@ -58,39 +67,67 @@ public class StoreMenu implements Menu {
     }
 
     private void updateFlow() {
-        System.out.print("ID to update: ");
+        System.out.print("Enter ID to update: ");
         int id = Integer.parseInt(scanner.nextLine());
         ClothingItem item = dao.getItemById(id);
+
         if (item == null) {
-            System.out.println("Not found!");
+            System.out.println("Item not found!");
             return;
         }
 
         System.out.println("Current: " + item);
-        System.out.print("New Name [Enter to skip]: ");
+        System.out.print("New Name (Enter to skip): ");
         String n = scanner.nextLine();
         if (!n.isEmpty()) item.setName(n);
 
-        System.out.print("New Price [Enter to skip]: ");
+        System.out.print("New Price (Enter to skip): ");
         String pStr = scanner.nextLine();
         if (!pStr.isEmpty()) item.setPrice(Double.parseDouble(pStr));
 
         dao.updateItem(item);
-        System.out.println("Updated!");
+        System.out.println("Updated successfully!");
     }
 
     private void deleteFlow() {
-        System.out.print("ID to delete: ");
+        System.out.print("Enter ID to delete: ");
         int id = Integer.parseInt(scanner.nextLine());
         System.out.print("Are you sure? (y/n): ");
         if (scanner.nextLine().equalsIgnoreCase("y")) {
-            dao.deleteItem(id);
-            System.out.println("Deleted.");
+            if (dao.deleteItem(id)) {
+                System.out.println("Deleted.");
+            } else {
+                System.out.println("ID not found.");
+            }
         }
     }
 
-    private void searchFlow() {
+    private void searchByNameFlow() {
         System.out.print("Enter name: ");
-        dao.searchByName(scanner.nextLine()).forEach(System.out::println);
+        String name = scanner.nextLine();
+        List<ClothingItem> results = dao.searchByName(name);
+        if (results.isEmpty()) {
+            System.out.println("Nothing found.");
+        } else {
+            results.forEach(System.out::println);
+        }
+    }
+
+    private void searchByPriceFlow() {
+        try {
+            System.out.print("Min price: ");
+            double min = Double.parseDouble(scanner.nextLine());
+            System.out.print("Max price: ");
+            double max = Double.parseDouble(scanner.nextLine());
+
+            List<ClothingItem> results = dao.searchByPriceRange(min, max);
+            if (results.isEmpty()) {
+                System.out.println("No items in this range.");
+            } else {
+                results.forEach(System.out::println);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Please enter valid numbers!");
+        }
     }
 }
